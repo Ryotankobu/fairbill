@@ -4,7 +4,7 @@ import React from 'react'
 const main_page = () => {
   return (
     <View>
-      <Text>main_page</Text>
+      <Text>main_page and I'm editing the feature/navigationMaking branch</Text>
     </View>
   )
 }
