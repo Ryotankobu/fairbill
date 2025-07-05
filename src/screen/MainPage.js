@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-const MainPage = ({navigation}) => {
+const MainPage = ({navigation, eventDetails}) => {
 
   const buttonhandler = (targetPage) => {
     navigation.navigate(targetPage)
@@ -22,6 +22,10 @@ const MainPage = ({navigation}) => {
       <TouchableOpacity onPress={() => buttonhandler("EventResultPage")}>
         <Text>completed Event Button directs to EventResultPage</Text>
       </TouchableOpacity>
+
+      {eventDetails.map((eachEvent, index) => (
+        <Text key={index}>{eachEvent.eventTitle}</Text>
+      ))}
     </View>
   );
 }

@@ -1,6 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
 import { HeaderBackButton } from "@react-navigation/elements";
 import MainPage from "./src/screen/MainPage";
 import EventCreationPage from "./src/screen/EventCreationPage";
@@ -9,22 +10,38 @@ import EventResultPage from "./src/screen/EventResultPage";
 const Stack = createStackNavigator();
 
 export default function App() {
+  const [eventDetails, setEventDetails] = useState([]);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="MainPage">
         <Stack.Screen
           name="MainPage"
-          component={MainPage}
+          // component={MainPage}
           options={{ title: "Main Page", headerLeft: null }}
-        />
+        >
+          {(props) => (
+            <MainPage
+              {...props}
+              eventDetails={eventDetails}
+            />
+          )}
+        </Stack.Screen>
         <Stack.Screen
           name="EventCreationPage"
-          component={EventCreationPage}
           options={{ title: "Event Creation" }}
-        />
+        >
+          {(props) => (
+            <EventCreationPage
+              {...props}
+              eventDetails={eventDetails}
+              setEventDetails={setEventDetails}
+            />
+          )}
+        </Stack.Screen>
         <Stack.Screen
           name="EventPage"
-          component={EventPage}
+          // component={EventPage}
           options={({ navigation }) => ({
             title: "Event Page",
             headerLeft: (props) => (
@@ -34,7 +51,9 @@ export default function App() {
               />
             ),
           })}
-        />
+        >
+          {(props) => <EventPage {...props} eventDetails={eventDetails} />}
+        </Stack.Screen>
         <Stack.Screen
           name="EventResultPage"
           component={EventResultPage}
