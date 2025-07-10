@@ -17,7 +17,6 @@ export default function App() {
       <Stack.Navigator initialRouteName="MainPage">
         <Stack.Screen
           name="MainPage"
-          // component={MainPage}
           options={{ title: "Main Page", headerLeft: null }}
         >
           {(props) => (

@@ -10,6 +10,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { Picker } from "@react-native-picker/picker";
 import MultiSelect from "react-native-multiple-select";
+import TButton from "../components/TButton";
 
 const EventPageModal = ({
   modalVisible,
@@ -148,23 +149,36 @@ const EventPageModal = ({
             selectedItems={selectedMembers}
           />
 
-          <TouchableOpacity
+          <TButton
+            title="Save"
+            iconName="floppy-o"
+            iconColor="red"
+            iconSize={20}
             onPress={() => {
               setModalVisible(false);
               billSaveHandler();
             }}
-          >
-            <Text>save</Text>
-          </TouchableOpacity>
+          />
 
-          <TouchableOpacity
+          <TButton
+            title="Close"
+            iconName="times-circle"
+            iconColor="red"
+            iconSize={20}
+            onPress={() => {
+              setModalVisible(false);
+              modalCloseHandler();
+            }}
+          />
+
+          {/* <TouchableOpacity
             onPress={() => {
               setModalVisible(false);
               modalCloseHandler();
             }}
           >
             <Text>Close</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </Modal>
     </View>

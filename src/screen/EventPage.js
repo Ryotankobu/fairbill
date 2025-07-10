@@ -8,9 +8,10 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import EventPageModal from "./EventPageModal";
+import TButton from "../components/TButton";
+import BillDisplayContainer from "../components/BillDisplayContainer";
 
 const EventPage = ({ navigation, events, setEvents, route }) => {
-  // const latestEvent = events[events.length - 1];
   const eventId = route.params.eventId;
   const showingEvent = events.find(e => e.id === eventId)
   const [modalVisible, setModalVisible] = useState(false);
@@ -22,23 +23,23 @@ const EventPage = ({ navigation, events, setEvents, route }) => {
     navigation.navigate(targetPage);
   };
 
-  const deleteButtonHandler = (deleteBillId) => {
-    const updatedEvents = events.map((eachEvent) => 
-      eachEvent.id === eventId ? {
-        ...eachEvent,
-        bills: eachEvent.bills.filter((bill) => bill.id !== deleteBillId)
-      } : eachEvent
-    );
-    setEvents(updatedEvents);
-  }
+  // const deleteButtonHandler = (deleteBillId) => {
+  //   const updatedEvents = events.map((eachEvent) => 
+  //     eachEvent.id === eventId ? {
+  //       ...eachEvent,
+  //       bills: eachEvent.bills.filter((bill) => bill.id !== deleteBillId)
+  //     } : eachEvent
+  //   );
+  //   setEvents(updatedEvents);
+  // }
 
-  const editButtonHandler = (editingBillId) => {
-    const foundBill = showingEvent.bills.find((bill) => bill.id === editingBillId);
-    if (foundBill) {
-      setEditingBill(foundBill);
-      setModalVisible(true)
-    }
-  }
+  // const editButtonHandler = (editingBillId) => {
+  //   const foundBill = showingEvent.bills.find((bill) => bill.id === editingBillId);
+  //   if (foundBill) {
+  //     setEditingBill(foundBill);
+  //     setModalVisible(true)
+  //   }
+  // }
 
   useEffect(() => {
     if (!bill || !showingEvent) return;
@@ -73,10 +74,23 @@ const EventPage = ({ navigation, events, setEvents, route }) => {
         />
       ) : showingEvent ? (
         <View>
-          <Text>this is EventPage</Text>
-
           <Text>{showingEvent.eventTitle}</Text>
 
+          <TButton
+            title="New Bill"
+            iconName="plus-circle"
+            iconColor="red"
+            iconSize={20}
+            onPress={() => setModalVisible(true)}
+          />
+
+          <BillDisplayContainer
+            showingEvent={showingEvent}
+            setEvents={setEvents}
+            setModalVisible={setModalVisible}
+            setEditingBill={setEditingBill}
+          />
+          {/* 
           {showingEvent.bills.map((eachBill, index) => (
             <View
               key={index}
@@ -95,15 +109,15 @@ const EventPage = ({ navigation, events, setEvents, route }) => {
                 <Text>Edit</Text>
               </TouchableOpacity>
             </View>
-          ))}
+          ))} */}
 
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Text>Show modal</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => buttonHandler("EventResultPage")}>
-            <Text>go to EventResultPage</Text>
-          </TouchableOpacity>
+          <TButton
+            title="Finalise"
+            iconName="check-square"
+            iconColor="red"
+            iconSize={20}
+            onPress={() => buttonHandler("EventResultPage")}
+          />
         </View>
       ) : (
         <View>
