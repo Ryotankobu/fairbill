@@ -9,70 +9,108 @@ import {
 import React, { useState, useEffect } from "react";
 import EventPageModal from "./EventPageModal";
 
-const EventPage = ({ navigation, eventDetails }) => {
-  const latestEvent = eventDetails[eventDetails.length - 1];
+const EventPage = ({ navigation, events, setEvents, route }) => {
+  // const latestEvent = events[events.length - 1];
+  const eventId = route.params.eventId;
+  const showingEvent = events.find(e => e.id === eventId)
   const [modalVisible, setModalVisible] = useState(false);
+  const [bill, setBill] = useState("")
+  const [editingBill, setEditingBill] = useState(null)
+  
 
-  const buttonhandler = (targetPage) => {
+  const buttonHandler = (targetPage) => {
     navigation.navigate(targetPage);
   };
+
+  const deleteButtonHandler = (deleteBillId) => {
+    const updatedEvents = events.map((eachEvent) => 
+      eachEvent.id === eventId ? {
+        ...eachEvent,
+        bills: eachEvent.bills.filter((bill) => bill.id !== deleteBillId)
+      } : eachEvent
+    );
+    setEvents(updatedEvents);
+  }
+
+  const editButtonHandler = (editingBillId) => {
+    const foundBill = showingEvent.bills.find((bill) => bill.id === editingBillId);
+    if (foundBill) {
+      setEditingBill(foundBill);
+      setModalVisible(true)
+    }
+  }
+
+  useEffect(() => {
+    if (!bill || !showingEvent) return;
+
+    const updatedEvents = events.map((event) => {
+      if (event.id !== eventId) return event;
+
+      // If editing, replace the bill. Otherwise, add new.
+      const isEditing = event.bills.some((b) => b.id === bill.id);
+      const updatedBills = isEditing
+        ? event.bills.map((b) => (b.id === bill.id ? bill : b))
+        : [...event.bills, bill];
+
+      return { ...event, bills: updatedBills };
+    });
+
+    setEvents(updatedEvents);
+    setBill(null);
+    setEditingBill(null);
+  }, [bill]);
 
   return (
     <View>
       {modalVisible ? (
         <EventPageModal
-          modalVisivle={modalVisible}
+          modalVisible={modalVisible}
           setModalVisible={setModalVisible}
+          setBill={setBill}
+          showingEvent={showingEvent}
+          editingBill={editingBill}
+          setEditingBill={setEditingBill}
         />
-      ) : (
+      ) : showingEvent ? (
         <View>
           <Text>this is EventPage</Text>
 
-          <Text>{latestEvent.eventTitle}</Text>
+          <Text>{showingEvent.eventTitle}</Text>
+
+          {showingEvent.bills.map((eachBill, index) => (
+            <View
+              key={index}
+              style={{ backgroundColor: "red", marginTop: "10" }}
+            >
+              <Text>
+                {eachBill.billTitle}-{eachBill.amount}-{eachBill.paidBy}-
+                {eachBill.involvedMembers}
+              </Text>
+              <TouchableOpacity
+                onPress={() => deleteButtonHandler(eachBill.id)}
+              >
+                <Text>Delete</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => editButtonHandler(eachBill.id)}>
+                <Text>Edit</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
 
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Text>Show modal</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => buttonhandler("EventResultPage")}>
+          <TouchableOpacity onPress={() => buttonHandler("EventResultPage")}>
             <Text>go to EventResultPage</Text>
           </TouchableOpacity>
         </View>
-      )}
-
-      {/* <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <Text>This is a modal</Text>
-          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-            <Text>Close</Text>
-          </TouchableOpacity>
+      ) : (
+        <View>
+          <Text>Event not found</Text>
+          <Text>{eventId}</Text>
         </View>
-      </Modal> */}
-
-
-
-      {/* <Text>this is EventPage</Text>
-
-      <Text>{latestEvent.eventTitle}</Text>
-
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <Text>Show modal</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => buttonhandler("EventResultPage")}>
-        <Text>go to EventResultPage</Text>
-      </TouchableOpacity> */}
-
-
-      
+      )}
     </View>
   );
 };

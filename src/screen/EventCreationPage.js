@@ -1,22 +1,25 @@
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import React, { useState, useEffect } from "react";
 
-const EventCreationPage = ({navigation, eventDetails, setEventDetails}) => {
+const EventCreationPage = ({navigation, events, setEvents}) => {
   const [eventTitle, setEventTitle] = useState("");
   const [memberName, setMemberName] = useState("");
   const [memberList, setMemberList] = useState([]);
+  
 
   const handleSavePress = () => {
+    const newEvent = {
+      id: Date.now(),
+      eventTitle: eventTitle,
+      eventMembers: memberList,
+      finalised: false,
+      bills: [],
+    };
 
-    setEventDetails([
-      ...eventDetails,
-      {
-        eventTitle: eventTitle,
-        eventmembers: memberList
-      }
-    ])
+    setEvents([...events, newEvent])
 
-    navigation.navigate("EventPage");
+
+    navigation.navigate("EventPage", {eventId: newEvent.id});
   };
 
   const handleMemberAdded = () => {
@@ -25,9 +28,6 @@ const EventCreationPage = ({navigation, eventDetails, setEventDetails}) => {
 
   }
 
-  // useEffect(() => {
-  // console.log(eventDetails)
-  // }, [memberList])
 
   return (
     <View>

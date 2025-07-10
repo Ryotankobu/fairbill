@@ -1,11 +1,14 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-const MainPage = ({navigation, eventDetails}) => {
+const MainPage = ({navigation, events}) => {
 
   const buttonhandler = (targetPage) => {
     navigation.navigate(targetPage)
+  }
 
+  const existingEventHandler = (eachEvent) => {
+    navigation.navigate("EventPage", { eventId: eachEvent.id });
   }
 
 
@@ -23,8 +26,13 @@ const MainPage = ({navigation, eventDetails}) => {
         <Text>completed Event Button directs to EventResultPage</Text>
       </TouchableOpacity>
 
-      {eventDetails.map((eachEvent, index) => (
-        <Text key={index}>{eachEvent.eventTitle}</Text>
+      {events.map((eachEvent, index) => (
+        <TouchableOpacity
+          onPress={() => existingEventHandler(eachEvent)}
+          key={index}
+        >
+          <Text>{eachEvent.eventTitle}</Text>
+        </TouchableOpacity>
       ))}
     </View>
   );

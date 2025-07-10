@@ -10,7 +10,7 @@ import EventResultPage from "./src/screen/EventResultPage";
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [eventDetails, setEventDetails] = useState([]);
+  const [events, setEvents] = useState([]);
 
   return (
     <NavigationContainer>
@@ -23,7 +23,7 @@ export default function App() {
           {(props) => (
             <MainPage
               {...props}
-              eventDetails={eventDetails}
+              events={events}
             />
           )}
         </Stack.Screen>
@@ -34,8 +34,8 @@ export default function App() {
           {(props) => (
             <EventCreationPage
               {...props}
-              eventDetails={eventDetails}
-              setEventDetails={setEventDetails}
+              events={events}
+              setEvents={setEvents}
             />
           )}
         </Stack.Screen>
@@ -52,7 +52,7 @@ export default function App() {
             ),
           })}
         >
-          {(props) => <EventPage {...props} eventDetails={eventDetails} />}
+          {(props) => <EventPage {...props} events={events} setEvents={setEvents} />}
         </Stack.Screen>
         <Stack.Screen
           name="EventResultPage"
