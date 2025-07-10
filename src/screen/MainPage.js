@@ -1,16 +1,21 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-const MainPage = ({navigation, events}) => {
-
+const MainPage = ({ navigation, events, setEvents }) => {
   const buttonhandler = (targetPage) => {
-    navigation.navigate(targetPage)
-  }
+    navigation.navigate(targetPage);
+  };
 
   const existingEventHandler = (eachEvent) => {
     navigation.navigate("EventPage", { eventId: eachEvent.id });
-  }
+  };
 
+  const eventDeletehandler = (deleteEventId) => {
+    const eventsAfterDeleting = events.filter(
+      (eachEvent) => eachEvent.id !== deleteEventId
+    );
+    setEvents(eventsAfterDeleting)
+  };
 
   return (
     <View>
@@ -27,15 +32,20 @@ const MainPage = ({navigation, events}) => {
       </TouchableOpacity>
 
       {events.map((eachEvent, index) => (
-        <TouchableOpacity
-          onPress={() => existingEventHandler(eachEvent)}
-          key={index}
-        >
-          <Text>{eachEvent.eventTitle}</Text>
-        </TouchableOpacity>
+        <View key={index} style={{ backgroundColor: "red", marginTop: "10" }}>
+          <Text>
+            {eachEvent.eventTitle}-{eachEvent.id}
+          </Text>
+          <TouchableOpacity onPress={() => existingEventHandler(eachEvent)}>
+            <Text>Edit</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => eventDeletehandler(eachEvent.id)}>
+            <Text>Delete</Text>
+          </TouchableOpacity>
+        </View>
       ))}
     </View>
   );
-}
+};
 
 export default MainPage;

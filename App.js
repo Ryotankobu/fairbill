@@ -21,10 +21,7 @@ export default function App() {
           options={{ title: "Main Page", headerLeft: null }}
         >
           {(props) => (
-            <MainPage
-              {...props}
-              events={events}
-            />
+            <MainPage {...props} events={events} setEvents={setEvents} />
           )}
         </Stack.Screen>
         <Stack.Screen
@@ -52,7 +49,9 @@ export default function App() {
             ),
           })}
         >
-          {(props) => <EventPage {...props} events={events} setEvents={setEvents} />}
+          {(props) => (
+            <EventPage {...props} events={events} setEvents={setEvents} />
+          )}
         </Stack.Screen>
         <Stack.Screen
           name="EventResultPage"
